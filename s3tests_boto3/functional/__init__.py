@@ -94,16 +94,16 @@ def get_versioned_objects_list(bucket, client=None):
 def get_delete_markers_list(bucket, client=None):
     if client == None:
         client = get_client()
-    response = client.list_object_versions(Bucket=bucket)
+    #response = client.list_object_versions(Bucket=bucket)
     delete_markers = []
 
-    if 'DeleteMarkers' in response:
-        contents = response['DeleteMarkers']
-        for obj in contents:
-            key = obj['Key']
-            version_id = obj['VersionId']
-            versioned_obj = (key,version_id)
-            delete_markers.append(versioned_obj)
+    #if 'DeleteMarkers' in response:
+    #    contents = response['DeleteMarkers']
+    #    for obj in contents:
+    #        key = obj['Key']
+    #        version_id = obj['VersionId']
+    #        versioned_obj = (key,version_id)
+    #        delete_markers.append(versioned_obj)
 
     return delete_markers
 
@@ -120,9 +120,9 @@ def nuke_prefixed_buckets(prefix, client=None):
             objects_list = get_objects_list(bucket_name, client)
             for obj in objects_list:
                 response = client.delete_object(Bucket=bucket_name,Key=obj)
-            versioned_objects_list = get_versioned_objects_list(bucket_name, client)
-            for obj in versioned_objects_list:
-                response = client.delete_object(Bucket=bucket_name,Key=obj[0],VersionId=obj[1])
+            #versioned_objects_list = get_versioned_objects_list(bucket_name, client)
+            #for obj in versioned_objects_list:
+            #    response = client.delete_object(Bucket=bucket_name,Key=obj[0],VersionId=obj[1])
             delete_markers = get_delete_markers_list(bucket_name, client)
             for obj in delete_markers:
                 response = client.delete_object(Bucket=bucket_name,Key=obj[0],VersionId=obj[1])
@@ -135,8 +135,8 @@ def nuke_prefixed_buckets(prefix, client=None):
                 # exception once occurred.
                 err = e
                 pass
-        if err:
-            raise err
+        #if err:
+        #    raise err
 
     print('Done with cleanup of buckets in tests.')
 
