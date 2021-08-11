@@ -701,7 +701,6 @@ def test_bucket_listv2_delimiter_none():
     eq(prefixes, [])
 
 @attr('list-objects-v2')
-@attr('skipsgw')
 def test_bucket_listv2_fetchowner_notempty():
     key_names = ['foo/bar', 'foo/baz', 'quux']
     bucket_name = _create_objects(keys=key_names)
@@ -2116,7 +2115,6 @@ def _get_body(response):
 @attr(method='all')
 @attr(operation='complete object life cycle')
 @attr(assertion='read back what we wrote and rewrote')
-@attr('skipsgw')
 def test_object_write_read_update_read_delete():
     bucket_name = get_new_bucket()
     client = get_client()
@@ -3083,7 +3081,6 @@ def test_post_object_condition_is_case_sensitive():
 @attr(method='post')
 @attr(operation='authenticated browser based upload via POST request')
 @attr(assertion='fails with expiration must be string error')
-@attr('skipsgw')
 def test_post_object_expires_is_case_sensitive():
     bucket_name = get_new_bucket()
     client = get_client()
@@ -3566,7 +3563,6 @@ def test_get_object_ifunmodifiedsince_failed():
 @attr(operation='data re-write w/ If-Match: the latest ETag')
 @attr(assertion='replaces previous data and metadata')
 @attr('fails_on_aws')
-@attr('skipsgw')
 def test_put_object_ifmatch_good():
     bucket_name = get_new_bucket()
     client = get_client()
@@ -3618,7 +3614,6 @@ def test_put_object_ifmatch_failed():
 @attr(operation='overwrite existing object w/ If-Match: *')
 @attr(assertion='replaces previous data and metadata')
 @attr('fails_on_aws')
-@attr('skipsgw')
 def test_put_object_ifmatch_overwrite_existed_good():
     bucket_name = get_new_bucket()
     client = get_client()
@@ -3662,7 +3657,6 @@ def test_put_object_ifmatch_nonexisted_failed():
 @attr(operation='overwrite existing object w/ If-None-Match: outdated ETag')
 @attr(assertion='replaces previous data and metadata')
 @attr('fails_on_aws')
-@attr('skipsgw')
 def test_put_object_ifnonmatch_good():
     bucket_name = get_new_bucket()
     client = get_client()
@@ -3713,7 +3707,6 @@ def test_put_object_ifnonmatch_failed():
 @attr(operation='overwrite non-existing object w/ If-None-Match: *')
 @attr(assertion='succeeds')
 @attr('fails_on_aws')
-@attr('skipsgw')
 def test_put_object_ifnonmatch_nonexisted_good():
     bucket_name = get_new_bucket()
     client = get_client()
@@ -3907,7 +3900,6 @@ def test_object_raw_get_bucket_acl():
 @attr(method='get')
 @attr(operation='unauthenticated on private object')
 @attr(assertion='fails 403')
-@attr('skipsgw')
 def test_object_raw_get_object_acl():
     bucket_name = _setup_bucket_object_acl('public-read', 'private')
 
@@ -4061,7 +4053,6 @@ def test_object_raw_get_x_amz_expires_out_positive_range():
 @attr(method='put')
 @attr(operation='unauthenticated, no object acls')
 @attr(assertion='fails 403')
-@attr('skipsgw')
 def test_object_anon_put():
     bucket_name = get_new_bucket()
     client = get_client()
@@ -4139,7 +4130,6 @@ def check_bad_bucket_name(bucket_name):
 @attr(method='put')
 @attr(operation='name begins with underscore')
 @attr(assertion='fails with subdomain: 400')
-@attr('skipsgw')
 def test_bucket_create_naming_bad_starts_nonalpha():
     bucket_name = get_new_bucket_name()
     check_bad_bucket_name('_' + bucket_name)
@@ -4265,7 +4255,6 @@ def _test_bucket_create_naming_good_long(length):
 @attr(assertion='fails with subdomain')
 @attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 # Should now pass on AWS even though it has 'fails_on_aws' attr.
-@attr('skipsgw')
 def test_bucket_create_naming_good_long_60():
     _test_bucket_create_naming_good_long(60)
 
@@ -4277,7 +4266,6 @@ def test_bucket_create_naming_good_long_60():
 @attr(assertion='fails with subdomain')
 @attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 # Should now pass on AWS even though it has 'fails_on_aws' attr.
-@attr('skipsgw')
 def test_bucket_create_naming_good_long_61():
     _test_bucket_create_naming_good_long(61)
 
@@ -4289,7 +4277,6 @@ def test_bucket_create_naming_good_long_61():
 @attr(assertion='fails with subdomain')
 @attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 # Should now pass on AWS even though it has 'fails_on_aws' attr.
-@attr('skipsgw')
 def test_bucket_create_naming_good_long_62():
     _test_bucket_create_naming_good_long(62)
 
@@ -4312,7 +4299,6 @@ def test_bucket_create_naming_good_long_63():
 @attr(assertion='fails with subdomain')
 @attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 # Should now pass on AWS even though it has 'fails_on_aws' attr.
-@attr('skipsgw')
 def test_bucket_list_long_name():
     prefix = get_new_bucket_name()
     length = 61
@@ -4334,7 +4320,6 @@ def test_bucket_list_long_name():
 @attr(method='put')
 @attr(operation='create w/ip address for name')
 @attr(assertion='fails on aws')
-@attr('skipsgw')
 def test_bucket_create_naming_bad_ip():
     check_bad_bucket_name('192.168.5.123')
 
@@ -4362,7 +4347,6 @@ def test_bucket_create_naming_bad_punctuation():
 @attr(assertion='fails')
 @attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 # Should now pass on AWS even though it has 'fails_on_aws' attr.
-@attr('skipsgw')
 def test_bucket_create_naming_dns_underscore():
     invalid_bucketname = 'foo_bar'
     status, error_code = check_invalid_bucketname(invalid_bucketname)
@@ -4376,7 +4360,6 @@ def test_bucket_create_naming_dns_underscore():
 @attr(operation='create w/100 byte name')
 @attr(assertion='fails with subdomain')
 @attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
-@attr('skipsgw')
 def test_bucket_create_naming_dns_long():
     prefix = get_prefix()
     assert len(prefix) < 50
@@ -4391,7 +4374,6 @@ def test_bucket_create_naming_dns_long():
 @attr(assertion='fails')
 @attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 # Should now pass on AWS even though it has 'fails_on_aws' attr.
-@attr('skipsgw')
 def test_bucket_create_naming_dns_dash_at_end():
     invalid_bucketname = 'foo-'
     status, error_code = check_invalid_bucketname(invalid_bucketname)
@@ -4407,7 +4389,6 @@ def test_bucket_create_naming_dns_dash_at_end():
 @attr(assertion='fails')
 @attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 # Should now pass on AWS even though it has 'fails_on_aws' attr.
-@attr('skipsgw')
 def test_bucket_create_naming_dns_dot_dot():
     invalid_bucketname = 'foo..bar'
     status, error_code = check_invalid_bucketname(invalid_bucketname)
@@ -4423,7 +4404,6 @@ def test_bucket_create_naming_dns_dot_dot():
 @attr(assertion='fails')
 @attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 # Should now pass on AWS even though it has 'fails_on_aws' attr.
-@attr('skipsgw')
 def test_bucket_create_naming_dns_dot_dash():
     invalid_bucketname = 'foo.-bar'
     status, error_code = check_invalid_bucketname(invalid_bucketname)
@@ -4439,7 +4419,6 @@ def test_bucket_create_naming_dns_dot_dash():
 @attr(assertion='fails')
 @attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 # Should now pass on AWS even though it has 'fails_on_aws' attr.
-@attr('skipsgw')
 def test_bucket_create_naming_dns_dash_dot():
     invalid_bucketname = 'foo-.bar'
     status, error_code = check_invalid_bucketname(invalid_bucketname)
@@ -5123,7 +5102,6 @@ def add_obj_user_grant(bucket_name, key, grant):
 @attr(method='put')
 @attr(operation='set write-acp')
 @attr(assertion='does not modify other attributes')
-@attr('skipsgw')
 def test_object_acl_full_control_verify_attributes():
     bucket_name = get_new_bucket_name()
     main_client = get_client()
@@ -5158,7 +5136,6 @@ def test_object_acl_full_control_verify_attributes():
 @attr(method='ACLs')
 @attr(operation='set acl private')
 @attr(assertion='a private object can be set to private')
-@attr('skipsgw')
 def test_bucket_acl_canned_private_to_private():
     bucket_name = get_new_bucket()
     client = get_client()
@@ -6410,7 +6387,6 @@ def test_object_copy_same_bucket():
 @attr(method='put')
 @attr(operation='copy object with content-type')
 @attr(assertion='works')
-@attr('skipsgw')
 def test_object_copy_verify_contenttype():
     bucket_name = get_new_bucket()
     client = get_client()
@@ -6551,8 +6527,6 @@ def test_object_copy_canned_acl():
 @attr(resource='object')
 @attr(method='put')
 @attr(operation='copy object and retain metadata')
-@attr('skipsgw')
-#XXX TODO: we should probably fix this one
 def test_object_copy_retaining_metadata():
     for size in [3, 1024 * 1024]:
         bucket_name = get_new_bucket()
@@ -6574,8 +6548,6 @@ def test_object_copy_retaining_metadata():
 @attr(resource='object')
 @attr(method='put')
 @attr(operation='copy object and replace metadata')
-@attr('skipsgw')
-#XXX TODO: we should probably fix this one
 def test_object_copy_replacing_metadata():
     for size in [3, 1024 * 1024]:
         bucket_name = get_new_bucket()
@@ -6978,7 +6950,6 @@ def test_multipart_copy_invalid_range():
 @attr(operation='check multipart copy with an improperly formatted range')
 # TODO: remove fails_on_rgw when https://tracker.ceph.com/issues/40795 is resolved
 @attr('fails_on_rgw')
-@attr('skipsgw')
 def test_multipart_copy_improper_range():
     client = get_client()
     src_key = 'source'
@@ -7079,7 +7050,6 @@ def _check_content_using_range(key, bucket_name, data, step):
 @attr(operation='complete multi-part upload')
 @attr(assertion='successful')
 @attr('fails_on_aws')
-@attr('skipsgw')
 def test_multipart_upload():
     bucket_name = get_new_bucket()
     key="mymultipart"
@@ -7331,7 +7301,6 @@ def _do_test_multipart_upload_contents(bucket_name, key, num_parts):
 @attr(method='put')
 @attr(operation='check contents of multi-part upload')
 @attr(assertion='successful')
-@attr('skipsgw')
 def test_multipart_upload_contents():
     bucket_name = get_new_bucket()
     _do_test_multipart_upload_contents(bucket_name, 'mymultipart', 3)
@@ -7340,7 +7309,6 @@ def test_multipart_upload_contents():
 @attr(method='put')
 @attr(operation=' multi-part upload overwrites existing key')
 @attr(assertion='successful')
-@attr('skipsgw')
 def test_multipart_upload_overwrite_existing_object():
     bucket_name = get_new_bucket()
     client = get_client()
@@ -7884,7 +7852,6 @@ def _test_atomic_read(file_size):
 @attr(method='put')
 @attr(operation='read atomicity')
 @attr(assertion='1MB successful')
-@attr('skipsgw')
 def test_atomic_read_1mb():
     _test_atomic_read(1024*1024)
 
@@ -7892,7 +7859,6 @@ def test_atomic_read_1mb():
 @attr(method='put')
 @attr(operation='read atomicity')
 @attr(assertion='4MB successful')
-@attr('skipsgw')
 def test_atomic_read_4mb():
     _test_atomic_read(1024*1024*4)
 
@@ -7900,7 +7866,6 @@ def test_atomic_read_4mb():
 @attr(method='put')
 @attr(operation='read atomicity')
 @attr(assertion='8MB successful')
-@attr('skipsgw')
 def test_atomic_read_8mb():
     _test_atomic_read(1024*1024*8)
 
@@ -7940,7 +7905,6 @@ def _test_atomic_write(file_size):
 @attr(method='put')
 @attr(operation='write atomicity')
 @attr(assertion='1MB successful')
-@attr('skipsgw')
 def test_atomic_write_1mb():
     _test_atomic_write(1024*1024)
 
@@ -7948,7 +7912,6 @@ def test_atomic_write_1mb():
 @attr(method='put')
 @attr(operation='write atomicity')
 @attr(assertion='4MB successful')
-@attr('skipsgw')
 def test_atomic_write_4mb():
     _test_atomic_write(1024*1024*4)
 
@@ -7956,7 +7919,6 @@ def test_atomic_write_4mb():
 @attr(method='put')
 @attr(operation='write atomicity')
 @attr(assertion='8MB successful')
-@attr('skipsgw')
 def test_atomic_write_8mb():
     _test_atomic_write(1024*1024*8)
 
@@ -7988,7 +7950,6 @@ def _test_atomic_dual_write(file_size):
 @attr(method='put')
 @attr(operation='write one or the other')
 @attr(assertion='1MB successful')
-@attr('skipsgw')
 def test_atomic_dual_write_1mb():
     _test_atomic_dual_write(1024*1024)
 
@@ -7996,7 +7957,6 @@ def test_atomic_dual_write_1mb():
 @attr(method='put')
 @attr(operation='write one or the other')
 @attr(assertion='4MB successful')
-@attr('skipsgw')
 def test_atomic_dual_write_4mb():
     _test_atomic_dual_write(1024*1024*4)
 
@@ -8004,7 +7964,6 @@ def test_atomic_dual_write_4mb():
 @attr(method='put')
 @attr(operation='write one or the other')
 @attr(assertion='8MB successful')
-@attr('skipsgw')
 def test_atomic_dual_write_8mb():
     _test_atomic_dual_write(1024*1024*8)
 
@@ -8042,7 +8001,6 @@ def _test_atomic_conditional_write(file_size):
 @attr(operation='write atomicity')
 @attr(assertion='1MB successful')
 @attr('fails_on_aws')
-@attr('skipsgw')
 def test_atomic_conditional_write_1mb():
     _test_atomic_conditional_write(1024*1024)
 
@@ -8095,7 +8053,6 @@ def test_atomic_dual_conditional_write_1mb():
 @attr(operation='write file in deleted bucket')
 @attr(assertion='fail 404')
 @attr('fails_on_aws')
-@attr('skipsgw')
 # TODO: test not passing with SSL, fix this
 @attr('fails_on_rgw')
 def test_atomic_write_bucket_gone():
@@ -8220,7 +8177,6 @@ def test_multipart_resend_first_finishes_last():
 @attr(method='get')
 @attr(operation='range')
 @attr(assertion='returns correct data, 206')
-@attr('skipsgw')
 def test_ranged_request_response_code():
     content = 'testcontent'
 
@@ -8242,7 +8198,6 @@ def _generate_random_string(size):
 @attr(method='get')
 @attr(operation='range')
 @attr(assertion='returns correct data, 206')
-@attr('skipsgw')
 def test_ranged_big_request_response_code():
     content = _generate_random_string(8*1024*1024)
 
@@ -8261,7 +8216,6 @@ def test_ranged_big_request_response_code():
 @attr(method='get')
 @attr(operation='range')
 @attr(assertion='returns correct data, 206')
-@attr('skipsgw')
 def test_ranged_request_skip_leading_bytes_response_code():
     content = 'testcontent'
 
@@ -8280,7 +8234,6 @@ def test_ranged_request_skip_leading_bytes_response_code():
 @attr(method='get')
 @attr(operation='range')
 @attr(assertion='returns correct data, 206')
-@attr('skipsgw')
 def test_ranged_request_return_trailing_bytes_response_code():
     content = 'testcontent'
 
